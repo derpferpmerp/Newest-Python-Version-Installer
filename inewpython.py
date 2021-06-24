@@ -1,12 +1,14 @@
 import re
 import string
 import subprocess
+
 import requests
 
 versionslist = []
-for lineofhtml in (requests.get("https://www.python.org/ftp/python/").text).split("\n"):
+for lineofhtml in (
+        requests.get("https://www.python.org/ftp/python/").text).split("\n"):
     lineofhtml = re.sub("  .*", "", str(lineofhtml))
-versionsunpruned = re.findall('(?<=f=")(.*?)(?=\\")', str(lineofhtml))
+    versionsunpruned = re.findall('(?<=f=")(.*?)(?=\\")', str(lineofhtml))
     if versionsunpruned == [] or versionsunpruned == ["../"]:
         continue
     else:
@@ -19,7 +21,6 @@ versionsunpruned = re.findall('(?<=f=")(.*?)(?=\\")', str(lineofhtml))
             valid = True
     if valid:
         versionslist.append(versionsunpruned)
-
 
 highestVersion = versionslist[-1].replace("/", "")
 subprocess.call(
